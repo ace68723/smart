@@ -78,8 +78,11 @@ double ALG::tryAddTask(int iTask, int iDriver, CDriver & driver, vector<CTask> &
 		return 0;
 	}
 	double delta = dTime - driver.delayTime;
-	if (delta == 0) delta = 0.01;
-	return 100/delta;
+	if (fTime < 0.01) fTime = 0.01;
+	if (delta <= 0.01) 
+		return (100/0.01) + 100/fTime;
+	else
+		return 100/delta;
 }
 void ALG::arrange_future_tasks(CDriver & driver, vector<CTask> & tasks)
 {

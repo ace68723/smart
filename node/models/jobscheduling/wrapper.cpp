@@ -85,7 +85,6 @@ void Method(const FunctionCallbackInfo<Value>& args) {
 	String::Utf8Value str(args[0]->ToString());
 	cstr = *str;
 
-	int ret;
 	CTime curTime;
 	CRTime deliLimit;
 	vector<CDriver> drivers;
@@ -93,10 +92,11 @@ void Method(const FunctionCallbackInfo<Value>& args) {
 	vector<CPath> paths;
 	vector<CScheduleItem> schedule;
 	schedule.clear();
-	if (parseInput(cstr, curTime, deliLimit, drivers, tasks, paths))
-		ret = ALG::findScheduleGreedy(curTime, deliLimit, drivers, tasks, paths, schedule);
-	if (ret != E_NORMAL) {
-		printf("search algorithm returned %d.\n", ret);
+	if (parseInput(cstr, curTime, deliLimit, drivers, tasks, paths)) {
+		int ret = ALG::findScheduleGreedy(curTime, deliLimit, drivers, tasks, paths, schedule);
+		if (ret != E_NORMAL) {
+			printf("search algorithm returned %d.\n", ret);
+		}
 	}
 	Local<String> schd_string = String::NewFromUtf8(isolate, prepareOutput(schedule).c_str());
 	//args.GetReturnValue().Set(schd_string);
